@@ -8,11 +8,14 @@ class SortedLinkedList{
 public:
     Node* head;
     Node* tail;
-    Node* currentNode;
+    Node* NextNode; // keeps track of the current node used in seeNext seeAt and reset
+    int NextNodeTrigger; // used to tell if NextNode has already been used
 
     SortedLinkedList() {
         head = nullptr;
         tail = nullptr;
+        NextNode = nullptr;
+        NextNodeTrigger = 0;
     }
 
     Node* studentnode(Student* student){
@@ -83,6 +86,9 @@ public:
         } else{
             head = nextnode;
         }
+        if (NextNode == node){
+            NextNode = nextnode; // if NextNode was the node removed change current node to the next node
+        }
         return true;
     }
 
@@ -126,19 +132,24 @@ public:
     }
 
     /// see next
-    Student seeNext(Node* curnode){
-        if (curnode->GetNext() == nullptr){
+    Node seeNext(){
+        if (NextNodeTrigger == 0){ // checks if currrentNode has been changed before
+            NextNode = head;
+            NextNodeTrigger = 1;
+        }
+        if (isEmpty()){ // checks if list is empty
             throw std::exception();
         }
-        Student* student = curnode->GetNext()->GetData();
-        return *student;
+        Node* node = NextNode;
+        NextNode = NextNode->GetNext(); // moves NextNode to the next node
+        return *node;
     }
 
 
     /// see at
-    /// Returns the student at that index
+    /// Returns the node at that index
     /// throws error if index is outside of the lists range
-    Student seeAt(int index){ /// index starts at 0
+    Node seeAt(int index){ /// index starts at 0
         if (index > size()-1 or index < 0){ //checks if index is within list bounds
             throw std::exception();
         }
@@ -146,15 +157,17 @@ public:
         for(int i = 0; i < index; i++){ // find the node at index
             curnode = curnode->GetNext();
         }
-        Student* student = curnode->GetData();
 
-        return *student;
+        NextNode = curnode->GetNext();
+        NextNodeTrigger = 1;
+        return *curnode;
     }
 
     ///reset
     ///resets the currentNode location to the start of the list
     void reset(){
-        currentNode = head;
+        NextNode = head;
+        NextNodeTrigger = 1;
     }
 
     //Destructor
