@@ -1,126 +1,167 @@
-#ifndef LINKEDLIST_H
-#define LINKEDLIST_H
+#ifndef SORTEDLINKEDLIST_H
+#define SORTEDLINKEDLIST_H
 #include "Node.h"
 #include "Student.h"
+using namespace std;
 
 class SortedLinkedList{
-private:
-   // Optional: Add any desired private functions here
-
 public:
-   Node* head;
-   Node* tail;
+    Node* head;
+    Node* tail;
+    Node* currentNode;
 
-   SortedNumberList() {
-      head = nullptr;
-      tail = nullptr;
-   }
-
-   
-   // make it so it automatically adds it to the correct sorted position by mNumber
-   void addItem(Student* student) {
-      Node* node = new Node(student);
-      Node* curnode;
-      Node* nextnode;
-    ////// Need to change to sort by mnumber
-      if (head == nullptr){
-         head = node;
-         tail = node;
-      } else {
-         curnode = head;
-         nextnode = curnode->GetNext();
-         if (curnode->GetData() > node->GetData()){
-            std::cout<< "Put it at da benining" << std::endl;
-            head = node;
-            node->SetNext(curnode);
-            curnode->SetPrevious(node);
-         } else{
-            while (nextnode != nullptr and nextnode->GetData() <= node->GetData()){
-               curnode = nextnode;
-               nextnode = nextnode->GetNext();
-            }
-            node->SetNext(nextnode);
-            node->SetPrevious(curnode);
-            curnode->SetNext(node);
-            if (node->GetNext() != nullptr){
-               nextnode->SetPrevious(node);
-            } else{
-               tail = node;
-            }
-         }
-      }
-   }
-
-   // Removes the node with the specified number value from the list. Returns
-   // true if the node is found and removed, false otherwise.
-   bool Remove(Student* student) { /// change to work for students
-      Node* curnode; /// we want it to remove the node 
-      Node* nextnode;
-      Node* prevnode;
-      curnode = head;
-      while (curnode != nullptr and curnode->GetData() != number){
-         curnode = curnode->GetNext();
-      }
-      if (curnode == nullptr) {
-         return false;
-      }
-      nextnode = curnode->GetNext();
-      prevnode = curnode->GetPrevious();
-      if (nextnode != nullptr){
-         nextnode->SetPrevious(prevnode);
-      } else{
-         tail = prevnode;
-      }
-      if (prevnode != nullptr){
-         prevnode->SetNext(nextnode);
-      } else{
-         head = nextnode;
-      }
-      return true;
-   }
-   
-   //// get item
-   Student* getItem(Node* node){
-       /// returns student and removes it from the list 
-   }
-   
-   /// is in list?
-    bool isInList(Student* student){
-        
+    SortedLinkedList() {
+        head = nullptr;
+        tail = nullptr;
     }
-    
+
+    Node* studentnode(Student* student){
+        Node* curnode = head;
+        if (head == nullptr){
+            return curnode;
+        }
+        while (curnode->GetData() != student and curnode != nullptr){
+            curnode = curnode->GetNext();
+        }
+        return curnode;
+    }
+/*
+    // make it so it automatically adds it to the correct sorted position by mNumber
+    void addItem(Student* student) {
+        Node* node = new Node(student);
+        Node* curnode;
+        Node* nextnode;
+        ////// Need to change to sort by mnumber
+        if (head == nullptr){
+            head = node;
+            tail = node;
+        } else {
+            curnode = head;
+            nextnode = curnode->GetNext();
+            if (curnode->GetData() > node->GetData()){
+                std::cout<< "Put it at da benining" << std::endl;
+                head = node;
+                node->SetNext(curnode);
+                curnode->SetPrevious(node);
+            } else{
+                while (nextnode != nullptr and nextnode->GetData() <= node->GetData()){
+                    curnode = nextnode;
+                    nextnode = nextnode->GetNext();
+                }
+                node->SetNext(nextnode);
+                node->SetPrevious(curnode);
+                curnode->SetNext(node);
+                if (node->GetNext() != nullptr){
+                    nextnode->SetPrevious(node);
+                } else{
+                    tail = node;
+                }
+            }
+        }
+    }
+*/
+    // Removes the node with the specified student from the list. Returns
+    // true if the node is found and removed, false otherwise.
+    bool Remove(Student* student, Node* node = nullptr) {
+        if (node == nullptr){
+            node = studentnode(student);
+        }
+        Node* nextnode;
+        Node* prevnode;
+        if (node == nullptr) {
+            return false;
+        }
+        nextnode = node->GetNext();
+        prevnode = node->GetPrevious();
+        if (nextnode != nullptr){
+            nextnode->SetPrevious(prevnode);
+        } else{
+            tail = prevnode;
+        }
+        if (prevnode != nullptr){
+            prevnode->SetNext(nextnode);
+        } else{
+            head = nextnode;
+        }
+        return true;
+    }
+
+    //// get item
+    Student* getItem(Node* node){
+        Student* student = node->GetData();
+        Remove(student, node);
+        /// returns student and removes it from the list
+        return student;
+    }
+
+    /// is in list?
+    bool isInList(Student* student){
+        Node* node = studentnode(student); // Uses "studentnode" function which returns nullptr if student is not in the list
+        if (node == nullptr){
+            return false;
+        }
+        return true;
+    }
+
     /// is empty?
     bool isEmpty(){
-        
+        if(head == nullptr){
+            return true;
+        }
+        return false;
     }
-    
+
     /// size?
     int size(){
-        
+        int count = 0;
+        if (isEmpty()){
+            return count;
+        }
+        Node* curnode = head;
+        while (curnode != nullptr){
+            count += 1;
+            curnode = curnode->GetNext();
+        }
+        return count;
     }
-    
+
     /// see next
     Student seeNext(Node* curnode){
-        
+        if (curnode->GetNext() == nullptr){
+            throw std::exception();
+        }
+        Student* student = curnode->GetNext()->GetData();
+        return *student;
     }
-    
+
+
     /// see at
-    Student seeNext(int index){
-        /// index at 0 
-        
+    /// Returns the student at that index
+    /// throws error if index is outside of the lists range
+    Student seeAt(int index){ /// index starts at 0
+        if (index > size()-1 or index < 0){ //checks if index is within list bounds
+            throw std::exception();
+        }
+        Node* curnode = head;
+        for(int i = 0; i < index; i++){ // find the node at index
+            curnode = curnode->GetNext();
+        }
+        Student* student = curnode->GetData();
+
+        return *student;
     }
-    
-    /// reset
-    void reset(Node* curnode){
-        ///moves curnode to front of list
+
+    ///reset
+    ///resets the currentNode location to the start of the list
+    void reset(){
+        currentNode = head;
     }
-    
-    void deconstruct(Node* node){
-        /// fix node conections
-        /// deconstruct the student in the node 
-        /// deconstruct node 
+
+    //Destructor
+    virtual ~SortedLinkedList(){
+
     }
-    
+
 };
 
-#endif
+#endif // SORTEDLINKEDLIST_H
