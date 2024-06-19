@@ -51,9 +51,9 @@ public:
     }
 
 
-    ///get Mnumber
+    ///get Mnumbernumber
     /// removes m and leading zeros then converts returns the rest as an int
-    virtual int getMnum(){
+    virtual int getMnumnum(){
         string temp = Mnumber; // creates temp so original Mnumber is not altered
         int i = 1;
         while(temp[i] == '0'){
@@ -63,6 +63,10 @@ public:
         return stoi(temp);
     }
 
+    // get Mbumber
+    virtual string getMnum(){
+        return Mnumber;
+    }
     // get age
     virtual double getAge(){
         double age;
