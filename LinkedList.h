@@ -28,10 +28,11 @@ public:
         }
         return curnode;
     }
-/*
+
     // make it so it automatically adds it to the correct sorted position by mNumber
     void addItem(Student* student) {
         Node* node = new Node(student);
+        int Mnum = student->getMnumnum();
         Node* curnode;
         Node* nextnode;
         ////// Need to change to sort by mnumber
@@ -41,13 +42,13 @@ public:
         } else {
             curnode = head;
             nextnode = curnode->GetNext();
-            if (curnode->GetData() > node->GetData()){
-                std::cout<< "Put it at da benining" << std::endl;
+            int curMnum = curnode->GetData()->getMnumnum();
+            if (curMnum < Mnum){
                 head = node;
                 node->SetNext(curnode);
                 curnode->SetPrevious(node);
             } else{
-                while (nextnode != nullptr and nextnode->GetData() <= node->GetData()){
+                while (nextnode != nullptr and nextnode->GetData()->getMnum() >= node->GetData()->getMnum()){
                     curnode = nextnode;
                     nextnode = nextnode->GetNext();
                 }
@@ -62,13 +63,35 @@ public:
             }
         }
     }
-*/
+
     // Removes the node with the specified student from the list. Returns
     // true if the node is found and removed, false otherwise.
-    bool Remove(Student* student, Node* node = nullptr) {
-        if (node == nullptr){
-            node = studentnode(student);
+    bool Remove(Student* student) {
+        Node* node = studentnode(student);
+        Node* nextnode;
+        Node* prevnode;
+        if (node == nullptr) {
+            return false;
         }
+        nextnode = node->GetNext();
+        prevnode = node->GetPrevious();
+        if (nextnode != nullptr){
+            nextnode->SetPrevious(prevnode);
+        } else{
+            tail = prevnode;
+        }
+        if (prevnode != nullptr){
+            prevnode->SetNext(nextnode);
+        } else{
+            head = nextnode;
+        }
+        if (NextNode == node){
+            NextNode = nextnode; // if NextNode was the node removed change current node to the next node
+        }
+        return true;
+    }
+
+    bool Remove(Node* node) {
         Node* nextnode;
         Node* prevnode;
         if (node == nullptr) {
@@ -95,7 +118,7 @@ public:
     //// get item
     Student* getItem(Node* node){
         Student* student = node->GetData();
-        Remove(student, node);
+        Remove(node);
         /// returns student and removes it from the list
         return student;
     }
@@ -149,7 +172,7 @@ public:
     /// see at
     /// Returns the node at that index
     /// throws error if index is outside of the lists range
-    Node seeAt(int index){ /// index starts at 0
+    Node* seeAt(int index){ /// index starts at 0
         if (index > size()-1 or index < 0){ //checks if index is within list bounds
             throw std::exception();
         }
@@ -160,7 +183,7 @@ public:
 
         NextNode = curnode->GetNext();
         NextNodeTrigger = 1;
-        return *curnode;
+        return curnode;
     }
 
     ///reset
@@ -172,7 +195,6 @@ public:
 
     //Destructor
     virtual ~SortedLinkedList(){
-
     }
 
 };
