@@ -23,8 +23,14 @@ public:
         if (head == nullptr){
             return curnode;
         }
-        while (curnode->GetData() != student and curnode != nullptr){
+        Student* stud = curnode->GetData();
+        while ( stud->getAge() != student->getAge() or stud->getgpa() != student->getgpa() or  stud->getMnum() != student->getMnum()
+                or stud->getname() != student->getname()){ // checks to see if all the student data match
             curnode = curnode->GetNext();
+            if (curnode == nullptr){ // Checks if the end of the list has been reached
+                return curnode;
+            }
+            stud = curnode->GetData();
         }
         return curnode;
     }
@@ -200,3 +206,4 @@ public:
 };
 
 #endif // SORTEDLINKEDLIST_H
+
