@@ -122,7 +122,7 @@ public:
     }
 
     //// get item
-    Student* getItem(Node* node){
+    Student* getItem(Node* node){ ///Returns the student and removes the node containing the student from the list
         Student* student = node->GetData();
         Remove(node);
         /// returns student and removes it from the list
@@ -161,17 +161,19 @@ public:
     }
 
     /// see next
-    Node seeNext(){
+    Node* seeNext(){
+        if (isEmpty()){ // checks if list is empty
+            throw std::exception();
+        }
         if (NextNodeTrigger == 0){ // checks if currrentNode has been changed before
             NextNode = head;
             NextNodeTrigger = 1;
         }
-        if (isEmpty()){ // checks if list is empty
-            throw std::exception();
-        }
         Node* node = NextNode;
-        NextNode = NextNode->GetNext(); // moves NextNode to the next node
-        return *node;
+        if(!(node == nullptr)){ // if the current node is a nullptr then "NextNode->GetNext()" will crash
+            NextNode = NextNode->GetNext(); // moves NextNode to the next node
+        }
+        return node;
     }
 
 
