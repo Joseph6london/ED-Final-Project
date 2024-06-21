@@ -103,11 +103,45 @@ bool TestStudentNode(){
     cout << "The studentNode function returned the wrong node :(." << endl;
     return false;
 }
-/*
+
+
 bool TestAddItem(){
+    SortedLinkedList list = createTestList();
+    Student* newStudent = new Student("Yes", "Man", "M23102108", "8/1/2001", 2.25);
+    string results;
+    list.addItem(newStudent);
+    if(list.isInList(newStudent)){
+        results = "Students are able to be added to the list!!";
+    }else{
+        results = "Students were not able to be added to the list :(.";
+    }
+    int numCorrect = 0;
+    Node* node = list.head;
+    Node* nextNode = node->GetNext();
+    int Mnum = node->GetData()->getMnumnum();
+    for(int i = 0; i< 21; i++){
+        if(Mnum >= nextNode->GetData()->getMnumnum()){ //Checks if all the students are properly sorted by Mnumber size in descending order
+            numCorrect += 1;
+        }
+        Mnum = nextNode->GetData()->getMnumnum();
+        nextNode = nextNode->GetNext();
+    }
+    if(numCorrect == 21){
+        results += " Students are all placed in correct order!!";
+        cout<< results << endl;
+        if(results == "Students are able to be added to the list!! Students are all placed in correct order!!"){
+            return true; // only return true if students are able to be added and placed in correct order
+        }
+        return false;
+    } else{
+        results += " Students are not in the right order :(.";
+        results += " Students are all placed in the list in correct order!!";
+        return false;
+    }
 
 }
-*/
+
+
 bool TestRemoveStudent(){
     SortedLinkedList list = createTestList();
     Student* testStudent = list.seeAt(20)->GetData(); // test student is Paul Blart
@@ -134,30 +168,128 @@ bool TestRemoveNode(){
     return false;
 }
 
-/*
-bool TestGetItem(Node* node){
 
+bool TestGetItem(){
+    SortedLinkedList list = createTestList();
+    Node* testNode = list.seeAt(4);     // get a node to test
+    Student* testStudent = testNode->GetData();      // save the student from the test node
+    Student* studentRecieved = list.getItem(testNode);    // call getItem with test node
+    string studentTest;
+    if(testStudent == studentRecieved){    // check if the student recieved is the same as the student saved
+        studentTest = "correct";
+    } else{
+        studentTest = "wrong";
+    }
+    if(!(list.isInList(studentRecieved))){ // check if the node has been removed from the list
+        cout<< "The " << studentTest << " student was returned and the student/node has been removed!!" << endl;
+        if(studentTest ==  "correct"){ // only return true if both the correct student was returned and the node was removed
+            return true;
+        } else{
+            return false;
+        }
+    }else{
+        cout<< "The " << studentTest << " student was returned and the student/node was not removed :(." << endl;
+        return false;
+    }
 }
 
-bool TestIsInList(Student* student){
-
+bool TestIsInList(){
+    SortedLinkedList list = createTestList();
+    Student* testStudent1 = list.seeAt(20)->GetData(); // creates a student in the list
+    Student* testStudent2 = new Student("Jasper", "Gains", "M12345678", "1/1/1632", 0.1); // creates a student not in the list
+    string results;
+    if(list.isInList(testStudent1)){
+        results = "Students in the list are correctly identified to be in the list!! ";
+    }else{
+        results = "Students in the list are were wrongly identified to not be in the list :(. ";
+    }
+    if(!(list.isInList(testStudent2))){
+        results = results + "Students not in the list are correctly identified to not be in the list!!";
+        cout<< results << endl;
+        if(results == "Students in the list are correctly identified to be in the list!! Students not in the list are correctly identified to not be in the list!!"){
+            return true; // returns true if students in and out of the list were correctly identified
+        }
+        return false;
+    } else{
+        results = results + "Students not in the list were wrongly identified to be in the list :(.";
+        cout<< results << endl;
+        return false;
+    }
 }
+
 
 bool TestSize(){
-
+    SortedLinkedList emptyList;
+    SortedLinkedList fullList = createTestList();
+    if(emptyList.size() == 0 and fullList.size() == 22){ // checks if "size()" can correctly identify an empty list and a list of size 22
+        cout<<"List size assessed correctly!!" << endl;
+        return true;
+    }else{
+        cout<<"List size is wrong :(." <<endl;
+        return false;
+    }
 }
+
 
 bool TestSeeNext(){
-
+    SortedLinkedList list = createTestList();
+    int numCorrect = 0;
+    Node* node = list.head;
+    for(int i = 0; i< 22; i++){
+        if(node == list.seeNext()){ //Uses seeNext to go through every node in the list and checks if they are returned correctly
+            numCorrect += 1;
+        }
+        node = node->GetNext();
+    }
+    list.reset();
+    for(int i = 0; i< 22; i++){
+        if(list.seeNext() == list.seeAt(i)){ //Uses seeNext and seeAt to go through every node in the list and checks if they are returned correctly
+            numCorrect += 1; // checks if the seeNex
+        }
+    }
+    if(list.seeNext() == nullptr){ // checks if see next will return nullptr when looking outside list
+        numCorrect += 1;
+    }
+    if(numCorrect == 45){
+        cout<<"The seeNext function works!!"<<endl;
+        return true;
+    }else{
+        cout<<"The seeNext function does not work :(."<<endl;
+        return false;
+    }
 }
 
-bool TestSeeAt(int index){
-
+bool TestSeeAt(){
+    SortedLinkedList list = createTestList();
+    int numCorrect = 0;
+    Node* node = list.head;
+    for(int i = 0; i< 22; i++){
+        if(node == list.seeAt(i)){ //Uses seeNext to go through every node in the list and checks if they are returned correctly
+            numCorrect += 1;
+        }
+        node = node->GetNext();
+    }
+    if(numCorrect == 22){
+        cout<<"The seeAt function works!!"<<endl;
+        return true;
+    }else{
+        cout<<"The seeAt function does not work :(."<<endl;
+        return false;
+    }
 }
+
+
 
 bool TestReset(){
-
+    SortedLinkedList list = createTestList();
+    list.reset();
+    if(list.NextNode == list.head and list.NextNodeTrigger == 1){
+        cout<<"Reset function works!"<<endl;
+        return true;
+    }else{
+        cout<<"Reset function does not works :(."<<endl;
+        return false;
+    }
 }
-*/
-#endif // TEST_PROGRAM_H
 
+#endif // TEST_PROGRAM_H
