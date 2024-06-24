@@ -84,6 +84,18 @@ public:
     // create for each > < =
 */
 
+    bool operator<(const Student& other)const{
+        return MNumber<other.MNumber;
+    }
+    
+    bool operator>(const Student& other)const{
+        return MNumber>other.MNumber;
+    }
+
+    bool operator==(const Student& other)const{
+        return MNumber==other.MNumber;
+    }
+
     virtual double getgpa(){
         return GPA;
     }
