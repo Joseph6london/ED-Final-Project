@@ -85,15 +85,15 @@ public:
 */
 
     bool operator<(const Student& other)const{
-        return MNumber<other.MNumber;
+        return MNumber<other.Mnumber;
     }
     
     bool operator>(const Student& other)const{
-        return MNumber>other.MNumber;
+        return MNumber>other.Mnumber;
     }
 
     bool operator==(const Student& other)const{
-        return MNumber==other.MNumber;
+        return MNumber==other.Mnumber;
     }
 
     virtual double getgpa(){
