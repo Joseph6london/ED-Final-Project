@@ -11,6 +11,7 @@ public:
     Node* NextNode; // keeps track of the current node used in seeNext seeAt and reset
     int NextNodeTrigger; // used to tell if NextNode has already been used
 
+    // Constructor
     SortedLinkedList() {
         head = nullptr;
         tail = nullptr;
@@ -18,6 +19,16 @@ public:
         NextNodeTrigger = 0;
     }
 
+    // outputs the Name, GPA and Mnumner of every student in the list using Askii art
+    void display(){
+        for(int i = 0; i < this->size(); i++){
+            this->seeNext()->GetData()->display();
+            bigSpace(5);
+        }
+    }
+
+    // Takes a student and returnes the node containing said node
+    // returns nullptr if the student is not in the list
     Node* studentnode(Student* student){
         Node* curnode = head;
         if (head == nullptr){
@@ -35,7 +46,7 @@ public:
         return curnode;
     }
 
-    // make it so it automatically adds it to the correct sorted position by mNumber
+    // Adds a student  to the list automatically adds  to the correct sorted position by mNumber
     void addItem(Student* student) {
         Node* node = new Node(student);
         int Mnum = student->getMnumnum();
@@ -97,6 +108,7 @@ public:
         return true;
     }
 
+    // removes the specified node from the list
     bool Remove(Node* node) {
         Node* nextnode;
         Node* prevnode;
@@ -129,7 +141,8 @@ public:
         return student;
     }
 
-    /// is in list?
+    // Checks if the given student is in the list
+    // returns true if it is and false otherwise
     bool isInList(Student* student){
         Node* node = studentnode(student); // Uses "studentnode" function which returns nullptr if student is not in the list
         if (node == nullptr){
@@ -138,7 +151,7 @@ public:
         return true;
     }
 
-    /// is empty?
+    // Checks if the list is empty
     bool isEmpty(){
         if(head == nullptr){
             return true;
@@ -146,7 +159,7 @@ public:
         return false;
     }
 
-    /// size?
+    // Returns the size of the list
     int size(){
         int count = 0;
         if (isEmpty()){
@@ -160,7 +173,8 @@ public:
         return count;
     }
 
-    /// see next
+    // Returns the node pointed at by the "NextNode" member variable
+    // and points it to the next node in the list
     Node* seeNext(){
         if (isEmpty()){ // checks if list is empty
             throw std::exception();
@@ -177,9 +191,9 @@ public:
     }
 
 
-    /// see at
-    /// Returns the node at that index
-    /// throws error if index is outside of the lists range
+    // Returns the node at the given index
+    // Points the "NextNode" member variable at the node after the node returned
+    // throws error if index is outside of the lists range
     Node* seeAt(int index){ /// index starts at 0
         if (index > size()-1 or index < 0){ //checks if index is within list bounds
             throw std::exception();
@@ -195,7 +209,7 @@ public:
     }
 
     ///reset
-    ///resets the currentNode location to the start of the list
+    ///resets the NextNode location to the start of the list
     void reset(){
         NextNode = head;
         NextNodeTrigger = 1;
@@ -208,4 +222,3 @@ public:
 };
 
 #endif // SORTEDLINKEDLIST_H
-
