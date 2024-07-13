@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <map>
+#include "text_to_askii_dictionary.h"
 using namespace std;
 
 class Student{
@@ -16,8 +18,8 @@ protected:
     const vector<int> Date = {6,18,2024};
 
     // used for converting string dates into vectors of numbers
-    vector<int> getBeforeSlash(string str){
-        vector<int> date;
+    vector<double> getBeforeSlash(string str){
+        vector<double> date;
         for(int j = 0; j < 2; j++){
             int i = 0;
             string temp = str;
@@ -33,6 +35,7 @@ protected:
     }
 
 public:
+
     ///Constructor
     Student(string Fname, string Lname, string Mnum, string Bday, double gpa = 0){
         firstName = Fname;
@@ -45,7 +48,27 @@ public:
     virtual ~Student() {
     }
 
-    /// get name
+    // outputs the Name, GPA and Mnumner of the student in Askii art
+    void display(){
+        string text = "Student: "+this->getname();
+        printAskii(text);
+        bigSpace();
+        text = "Mnumber: " + this->getMnum();
+        printAskii(text);
+        bigSpace();
+
+        string gpa = to_string(this->getgpa());
+
+        for(int i = gpa.length() -1; i > 2 ; i--){
+            if(gpa[i] == '0'){
+                gpa.pop_back();
+            }
+        }
+        text = "GPA: " + gpa;
+        printAskii(text);
+    }
+
+    // Returns the name of the student
     virtual string getname(){
         return firstName + lastName;
     }
@@ -70,7 +93,7 @@ public:
     // get age
     virtual double getAge(){
         double age;
-        vector<int> Bdate = getBeforeSlash(Birthday);
+        vector<double> Bdate = getBeforeSlash(Birthday);
         age = Date[2]-Bdate[2] + (Date[0]-Bdate[0])/12 + (Date[1]-Bdate[1])/365; // calculates age in years
         age = round(age * 10000.0) / 10000.0; // rounds age to 4 decimal places
         return age;
@@ -85,15 +108,15 @@ public:
 */
 
     bool operator<(const Student& other)const{
-        return MNumber<other.Mnumber;
+        return Mnumber<other.Mnumber;
     }
-    
+
     bool operator>(const Student& other)const{
-        return MNumber>other.Mnumber;
+        return Mnumber>other.Mnumber;
     }
 
     bool operator==(const Student& other)const{
-        return MNumber==other.Mnumber;
+        return Mnumber==other.Mnumber;
     }
 
     virtual double getgpa(){
