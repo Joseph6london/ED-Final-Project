@@ -27,24 +27,34 @@ int main() {
 
     if (call==1) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==2) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==3) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==4) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==5) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==6) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==7) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==8) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==9) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==10) {
         cout<<""<<endl;
+        cin>>;
     } else if (call==11) {
         cout<<"Ending program"<<endl;
         return 0;
