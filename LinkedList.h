@@ -21,10 +21,43 @@ public:
 
     // outputs the Name, GPA and Mnumner of every student in the list using Askii art
     void display(){
+        Node* ogSNnode = seeNext();
+        reset(); // resets seeNext to the start of the list
         for(int i = 0; i < this->size(); i++){
             this->seeNext()->GetData()->display();
             bigSpace(5);
         }
+        int ogSNnodeIndex = findIndex(ogSNnode);
+        if (ogSNnodeIndex > 0){
+            seeAt(ogSNnodeIndex -1);
+        }else{
+            reset();
+        }
+
+    }
+
+    // returns the index of the given node
+    int findIndex(Node* node){
+        Node* curnode = head;
+        for(int i = 0; i < this->size(); i++){
+            if(curnode->GetData()->getMnum() == node->GetData()->getMnum()){
+                return i;
+            }
+            curnode = curnode->GetNext();
+        }
+        return -1;
+    }
+
+    // returns the index of the given student
+    int findIndex(Student* student){
+        Node* curnode = head;
+        for(int i = 0; i < this->size(); i++){
+            if(curnode->GetData()->getMnum() == student->getMnum()){
+                return i;
+            }
+            curnode = curnode->GetNext();
+        }
+        return -1;
     }
 
     // Takes a student and returnes the node containing said node
@@ -37,6 +70,25 @@ public:
         Student* stud = curnode->GetData();
         while ( stud->getAge() != student->getAge() or stud->getgpa() != student->getgpa() or  stud->getMnum() != student->getMnum()
                 or stud->getname() != student->getname()){ // checks to see if all the student data match
+            curnode = curnode->GetNext();
+            if (curnode == nullptr){ // Checks if the end of the list has been reached
+                return curnode;
+            }
+            stud = curnode->GetData();
+        }
+        return curnode;
+    }
+
+
+    // Takes a student and returnes the node containing said node
+    // returns nullptr if the student is not in the list
+    Node* studentnode(string Mnumber){
+        Node* curnode = head;
+        if (head == nullptr){
+            return curnode;
+        }
+        Student* stud = curnode->GetData();
+        while (stud->getMnum() != Mnumber){ // checks to see if all the student data match
             curnode = curnode->GetNext();
             if (curnode == nullptr){ // Checks if the end of the list has been reached
                 return curnode;
@@ -133,18 +185,44 @@ public:
         return true;
     }
 
-    //// get item
-    Student* getItem(Node* node){ ///Returns the student and removes the node containing the student from the list
+    // Returns the student containes in the given node
+    // and removes the node containing the student from the list
+    Student* getItem(Node* node){
         Student* student = node->GetData();
         Remove(node);
         /// returns student and removes it from the list
         return student;
     }
 
+    Student* getItem(string Mnum){
+        Node* curnode = head;
+        if (head == nullptr){
+            return nullptr;
+        }
+        Student* stud = curnode->GetData();
+        while (stud->getMnum() != Mnum) { // checks to see if Mnums Match
+            curnode = curnode->GetNext();
+            if (curnode == nullptr){ // Checks if the end of the list has been reached
+                return nullptr;
+            }
+            stud = curnode->GetData();
+        }
+        Remove(curnode);
+        return curnode->GetData();
+    }
+
     // Checks if the given student is in the list
     // returns true if it is and false otherwise
     bool isInList(Student* student){
         Node* node = studentnode(student); // Uses "studentnode" function which returns nullptr if student is not in the list
+        if (node == nullptr){
+            return false;
+        }
+        return true;
+    }
+
+    bool isInList(string Mnumber){
+        Node* node = studentnode(Mnumber); // Uses "studentnode" function which returns nullptr if student is not in the list
         if (node == nullptr){
             return false;
         }
